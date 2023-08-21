@@ -38,4 +38,12 @@ int 0x80      ; Linux kernel interrupt handler
 ; With objdump we can see that this binary does NOT has null bytes!!!
 ; Multipel tricks where used to avoid null bytes 
 ; Insted of moving 0 to a register, we use XOR it, the result is the same but no null bytes
-; Also using al and dl registers instead of 
+; Also using al and dl registers instead of eax and edx due to al uses 8 bits and eax 32 bits 
+; $ rasm2 -a x86 -b 32 "mov eax, 1"
+; b801000000
+; $ rasm2 -a x86 -b 32 "mov al, 1"
+; b001
+
+; To build the string "PLOP ! " we write it backwards (little endian) and begin by pushing zero (for the terminator)
+; Push the value in 4 bytes chunks and use ESP as string pointer
+
